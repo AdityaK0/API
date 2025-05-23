@@ -22,15 +22,20 @@ def api_root(request):
 
 
 @api_view(['POST', 'PUT', 'DELETE'])
+@permission_classes([AllowAny])
 def accounts(request):
     if request.method == 'POST':
-        return register(request)
+        return register(request._request)
+    
+    elif request.method in ['PUT', 'DELETE']:
+        if not request.user or not request.user.is_authenticated:
+            return Response({'detail': 'Authentication required'}, status=401)
 
-    elif request.method == 'PUT':
-        return update_user_profile(request)
-
+    if request.method == 'PUT':
+        return update_user_profile(request._request)
     elif request.method == 'DELETE':
-        return delete_user_account(request)
+        return delete_user_account(request._request)
+
 
 
 
@@ -42,6 +47,13 @@ def register(request):
         missing_fields = [ field for field in required  if not parameters.get(field)]
         if missing_fields:
             return Response({"error": f"Missing fields: {', '.join(missing_fields)}"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        phonenumber = parameters["phonenumber"]
+        
+        if len(str(phonenumber).strip().replace(" ","")) != 10:
+            return Response({"error":"The length of phone number should 10 "},status=status.HTTP_400_BAD_REQUEST)
+        if not str(phonenumber).isdigit():
+            return Response({"error":"The length of phone number should only contain digits "},status=status.HTTP_400_BAD_REQUEST)
                             
         
         username = parameters["username"]
@@ -52,7 +64,11 @@ def register(request):
         if User.objects.filter(email=email).exists():
             return Response({"already exists":"user with this email already exists >>>> "},status=status.HTTP_400_BAD_REQUEST)
         
-        phonenumber = parameters["phonenumber"]
+        
+
+        
+            
+            
         if Profile.objects.filter(phonenumber=phonenumber).exists():
             return Response({"already exists":"user with this phone number already exists >>>> "},status=status.HTTP_400_BAD_REQUEST)
         
@@ -69,14 +85,14 @@ def register(request):
         )
         user_profile.save()
         
-        token = get_tokens_for_user(user)
+        # token = get_tokens_for_user(user)
         
         return Response(
             {     
             "message":"user created successfully "
-            ,
+            # ,
             
-                "token":token
+            #     "token":token
             },
             status=status.HTTP_201_CREATED
             )

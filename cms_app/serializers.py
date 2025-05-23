@@ -6,16 +6,16 @@ from django.contrib.auth.models import User
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ['fullname', 'city']  
+        fields = ['fullname', 'city','phonenumber']  
 
 
 class UserSerializer(serializers.ModelSerializer):
     profile = ProfileSerializer(read_only=True)
+    
     class Meta:
         model = User
         fields = ('id', 'username', 'date_joined', 'is_active','profile')
         read_only_fields = ('id', 'created_at')
-        
       
         
     
@@ -34,7 +34,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         if profile_data:
             user_profile = Profile.objects.get(user=instance)
             user_profile.fullname = profile_data["fullname"]
-            user_profile.phonenumber  = profile_data["city"]
+            user_profile.city  = profile_data["city"]
             user_profile.save()
             
 
