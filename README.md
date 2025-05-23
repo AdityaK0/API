@@ -41,7 +41,7 @@ python manage.py migrate
 ### 5. Run the Development Server
 
 ```bash
-python manage.py runserver
+python manage.py runserver  (if your localhost port(8000) is already busy u can try other too  )
 ```
 
 The server will start at:
