@@ -15,14 +15,15 @@ For Windows: venv\Scripts\activate
 pip install -r requirements.txt
 
 
-DATABASE_URL=sqlite:///db.sqlite3  # or PostgreSQL URI
+
 
 python manage.py makemigrations
 
 python manage.py migrate
 
 
-python manage.py createsuperuser
-
-
 python manage.py runserver
+
+
+To test  please go through the documentation : https://documenter.getpostman.com/view/36760108/2sB2qahgPk
+
