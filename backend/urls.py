@@ -19,6 +19,7 @@ from django.urls import path,include
 from .views import root
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('',root),
     path('api/blog/', include('cms_app.urls')),
     path('api/auth/',include('user_auth.urls'))
 ]
