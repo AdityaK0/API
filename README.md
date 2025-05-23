@@ -67,7 +67,4 @@ This includes all available API routes, request types, and expected responses.
 3. obtain token via login if enviroment variable is intialized it will automatically set the value into the postman enviroment
 
 
-```
-Authorization: Token your_token_here
 
-```
